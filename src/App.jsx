@@ -1,17 +1,41 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Home } from "lucide-react";
+import { Home, BookOpen, PlusCircle, Info, Mail } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Layout from "./layouts/default"; // available: default, navbar, sidebar
+import Layout from "./layouts/navbar"; // Use the navbar layout
 import Index from "./pages/Index.jsx";
+import Recipes from "./pages/Recipes.jsx";
+import SubmitRecipe from "./pages/SubmitRecipe.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
+import Contact from "./pages/Contact.jsx";
 const queryClient = new QueryClient();
 
 export const navItems = [
   {
-    title: "Home", // Feel free to change this to your liking
+    title: "Home",
     to: "/",
     icon: <Home className="h-4 w-4" />,
+  },
+  {
+    title: "Recipes",
+    to: "/recipes",
+    icon: <BookOpen className="h-4 w-4" />,
+  },
+  {
+    title: "Submit Recipe",
+    to: "/submit-recipe",
+    icon: <PlusCircle className="h-4 w-4" />,
+  },
+  {
+    title: "About Us",
+    to: "/about-us",
+    icon: <Info className="h-4 w-4" />,
+  },
+  {
+    title: "Contact",
+    to: "/contact",
+    icon: <Mail className="h-4 w-4" />,
   },
 ];
 
@@ -24,7 +48,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />
-              {/* Add more routes here as needed */}
+              <Route path="recipes" element={<Recipes />} />
+              <Route path="submit-recipe" element={<SubmitRecipe />} />
+              <Route path="about-us" element={<AboutUs />} />
+              <Route path="contact" element={<Contact />} />
             </Route>
           </Routes>
         </Router>
