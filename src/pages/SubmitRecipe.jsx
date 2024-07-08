@@ -2,12 +2,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const SubmitRecipe = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (newRecipe) => {
+      const response = await fetch("/api/recipes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newRecipe),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit recipe");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+      toast("Recipe submitted successfully!");
+      reset();
+    },
+    onError: () => {
+      toast.error("Failed to submit recipe. Please try again.");
+    },
+  });
 
   const onSubmit = (data) => {
-    console.log(data);
+    mutation.mutate(data);
   };
 
   return (
@@ -27,10 +56,12 @@ const SubmitRecipe = () => {
           <Textarea {...register("steps")} placeholder="Steps" />
         </div>
         <div>
-          <label className="block text-sm font-medium">Image</label>
-          <Input type="file" {...register("image")} />
+          <label className="block text-sm font-medium">Image URL</label>
+          <Input {...register("image")} placeholder="Image URL" />
         </div>
-        <Button type="submit">Submit Recipe</Button>
+        <Button type="submit" disabled={mutation.isLoading}>
+          {mutation.isLoading ? "Submitting..." : "Submit Recipe"}
+        </Button>
       </form>
     </div>
   );
