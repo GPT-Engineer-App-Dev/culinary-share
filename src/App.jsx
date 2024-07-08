@@ -9,6 +9,7 @@ import Recipes from "./pages/Recipes.jsx";
 import SubmitRecipe from "./pages/SubmitRecipe.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Contact from "./pages/Contact.jsx";
+import RecipeDetail from "./pages/RecipeDetail.jsx";
 const queryClient = new QueryClient();
 
 export const navItems = [
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/" element={<Layout />}>
               <Route index element={<Index />} />
               <Route path="recipes" element={<Recipes />} />
+              <Route path="recipes/:id" element={<RecipeDetail />} />
               <Route path="submit-recipe" element={<SubmitRecipe />} />
               <Route path="about-us" element={<AboutUs />} />
               <Route path="contact" element={<Contact />} />
